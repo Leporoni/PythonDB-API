@@ -1,33 +1,41 @@
-import MySQLdb
+import fabrica_conexao
 
 class ClienteRepository():
 
     @staticmethod
     def listar_clientes():
-        db = MySQLdb.connect(user="root", passwd="123456", db="treinaweb_clientes", host="localhost", autocommit=True)
-        cursor = db.cursor()
-        cursor.execute("SELECT * FROM cliente")
-        print(cursor.fetchall())
-        db.close()
+        fabrica = fabrica_conexao.FabricaConexao.conectar()
+        try:
+            cursor = fabrica.cursor()
+            cursor.execute("SELECT * FROM cliente")
+            print(cursor.fetchall())
+        finally:
+            fabrica.close()
 
     @staticmethod
     def inserir_cliente(cliente):
-        db = MySQLdb.connect(user="root", passwd="123456", db="treinaweb_clientes", host="localhost", autocommit=True)
-        cursor = db.cursor()
-        cursor.execute("INSERT INTO cliente (nome, idade) values(%s, %s)", (cliente.nome, cliente.idade))
-        db.close()
+        fabrica = fabrica_conexao.FabricaConexao.conectar()
+        try:
+            cursor = fabrica.cursor()
+            cursor.execute("INSERT INTO cliente (nome, idade) values(%s, %s)", (cliente.nome, cliente.idade))
+        finally:
+            fabrica.close()
 
     @staticmethod
     def editar_cliente(id, cliente):
-        db = MySQLdb.connect(user="root", passwd="123456", db="treinaweb_clientes", host="localhost", autocommit=True)
-        cursor = db.cursor()
-        cursor.execute("UPDATE cliente SET nome=%(nome)s, idade=%(idade)s WHERE id=%(id)s",
+        fabrica = fabrica_conexao.FabricaConexao.conectar()
+        try:
+            cursor = fabrica.cursor()
+            cursor.execute("UPDATE cliente SET nome=%(nome)s, idade=%(idade)s WHERE id=%(id)s",
                        ({'nome': cliente.nome, 'idade': cliente.idade, 'id': id}))
-        db.close()
+        finally:
+            fabrica.close()
 
     @staticmethod
     def remover_cliente(id):
-        db = MySQLdb.connect(user="root", passwd="123456", db="treinaweb_clientes", host="localhost", autocommit=True)
-        cursor = db.cursor()
-        cursor.execute("DELETE FROM cliente WHERE id=%s", (id,))
-        db.close()
+        fabrica = fabrica_conexao.FabricaConexao.conectar()
+        try:
+            cursor = fabrica.cursor()
+            cursor.execute("DELETE FROM cliente WHERE id=%s", (id,))
+        finally:
+            fabrica.close()
